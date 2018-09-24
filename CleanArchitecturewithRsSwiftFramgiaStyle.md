@@ -1,4 +1,4 @@
-# Clean Architecture with RsSwift - Framgia Style
+# Clean Architecture with RxSwift - Framgia Style
 Chúng ta đều biết về các level sẽ trông như thế này:
 
 ![level](https://viblo.asia/uploads/dd700b20-877e-4fe0-bf46-24e0092f8f92.png)
@@ -22,8 +22,8 @@ Application có trách nhiệm cung cấp thông tin cho người dùng và xử
 Dĩ nhiên chúng ta sẽ viết code theo chiều từ trong ra ngoài (xét theo hình minh hoạ về 3 layer ở trên) nhưng hơi khác chút =)). Tức là: Domain ->  Application -> Platform
 Tức là:
 - Entities-> Usecase -> ViewModel (Navigator,..) -> ViewController
-- Unitest
-- Xong khi đảm bảo phần logic đã chạy đúng thì mới lắp API, giao diện vào,...Platformm (và đây là phần plasform) API, View,...
+- UnitTest
+- Xong khi đảm bảo phần logic đã chạy đúng thì mới lắp API, giao diện vào,...Platform (và đây là phần platform) API, View,...
 
 ## Viết code cho phần Domain
  Domain bao gồm phần Entities và UseCases. Hãy nhìn vào ví dụ [github](https://github.com/tuan188/MGCleanArchitecture)
@@ -79,7 +79,7 @@ avatarURLString <- map["owner.avatar_url"]
 ```
 Ở đây sử dụng `struct` thay vì `class` bởi vì `class` là kiểu tham chiếu trong khi `struct` là kiểu tham trị tức là giá trị của nó được `copy` khi gán tới 1 biến hoặc truyền như parametter trong function. 
 Tiếp theo bạn sẽ thắc mắc về việc `Repo` phải conform lại những protocol `Then`, `HasID` và `Hashable`
-thì `Then` để
+thì `Then` là cocoaPod để
 ```
 /// Makes it available to set properties with closures just after initializing and copying the value types.
 ///
@@ -127,7 +127,8 @@ return lhs.id == rhs.id
 
 ```
 
-Trong đó việc 1 entity của chúng ta như `Repo` phải conform protocol `Hashable` là để có thể sử dụng nó với `OrderedSet` để sắp xếp.
-Ví dụ như ở 1 
+Trong đó việc 1 entity của chúng ta như `Repo` phải conform protocol `Hashable` là để entity `Repo` có thể sử dụng nó với `OrderedSet` để sắp xếp.
+
+
 
 Depencdency Injection: https://toidicodedao.com/2015/11/03/dependency-injection-va-inversion-of-control-phan-1-dinh-nghia/
