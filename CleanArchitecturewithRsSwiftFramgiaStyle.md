@@ -128,7 +128,3 @@ return lhs.id == rhs.id
 ```
 
 Trong đó việc 1 entity của chúng ta như `Repo` phải conform protocol `Hashable` là để entity `Repo` có thể sử dụng nó với `OrderedSet` để sắp xếp.
-
-
-
-Depencdency Injection: https://toidicodedao.com/2015/11/03/dependency-injection-va-inversion-of-control-phan-1-dinh-nghia/

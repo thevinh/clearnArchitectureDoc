@@ -1,0 +1,44 @@
+### UseCase
+Sau khi viết code cho các Entities, theo đúng thứ tự như [phần I](https://github.com/thevinh/clearnArchitectureDoc/blob/master/CleanArchitecturewithRsSwiftFramgiaStyle.md) tiếp theo ta sẽ viết code cho phần UseCase.
+Như đã phân tích ở phần trước: file UseCase được đặt cùng chỗ với các file thuộc lớp `Application` như: Controller, ViewModel, Navigator,... cho dù nó thuộc về Domain.
+Bạn hãy tìm file `ReposUseCase` ở thư mục sau: Scenes/Repos
+
+```
+protocol ReposUseCaseType {
+func getRepoList() -> Observable<PagingInfo<Repo>>
+func loadMoreRepoList(page: Int) -> Observable<PagingInfo<Repo>>
+}
+
+struct ReposUseCase: ReposUseCaseType {
+let repository: RepoRepositoryType
+
+func getRepoList() -> Observable<PagingInfo<Repo>> {
+return loadMoreRepoList(page: 1)
+}
+
+func loadMoreRepoList(page: Int) -> Observable<PagingInfo<Repo>> {
+return repository.getRepoList(page: page, perPage: 10)
+}
+}
+```
+
+Cấu trúc của file UseCase bao gồm 2 phần: 1 protocol và 1 struct conform lại protocol ấy. Trong đó Protocol định nghĩa các UseCase, còn Struct thì implement các UseCase cụ thể ấy
+Cái này được gọi là `Dependency Inversion` chính là nguyên lý cuối cùng (chữ D) của `SOLID`. Các bạn có thể đọc thêm ở [Đây][https://toidicodedao.com/2015/11/03/dependency-injection-va-inversion-of-control-phan-1-dinh-nghia/]
+Nhưng có thể hiểu đơn giản là Các Class giao tiếp với nhau thông qua interface (ở đây là Protocol) chứ không phải thông qua Implementation để đảm bảo việc khi module cấp thấp thay đổi, các module cấp cao không phải thay đổi theo, giúp việc bảo trì, thay đổi hay testing dễ dàng hơn.
+Khoan hẵng bàn về code `RxSwift` thì chúng ta có thể thấy code rất dễ đọc. Có thể diễn giải ra rằng: Có 2 usecase ứng với Repo là: lấy danh sách các repo (`getRepoList`) và load thêm các repo (`loadMoreRepoList`) với đầu vào là số trang hiện tại. Trong đó hàm `getRepoList` thực chất chính là `loadMoreRepoList` với 
+
+
+// Note:
+Về hệ thống ViewController, ViewModel và Navigator thì
+Navigator là 1 struct có chứa 1 property kiểu UINavigationController thường được đặt tên là `navController`
+`navController` này được pass qua các VIewController bằng code:
+```
+let navigator = FilePreviewNavigator(navigationController: navigationController)
+```
+Bởi vì Navigator là 1 struct (do cách đặt tên nên thường bị hiểu nhầm là 1 NavigationController) nên nó có 1 Constructor mặc định để khởi tạo mọi property, các VIewController dĩ nhiên vẫn chỉ dùng chung 1 navigationcontroller được pass qua nhau để có thể push thêm view mới vào như code:
+```
+navigationController.pushViewController(vc, animated: true)
+```
+
+
+Dependency Injection: https://toidicodedao.com/2015/11/03/dependency-injection-va-inversion-of-control-phan-1-dinh-nghia/
